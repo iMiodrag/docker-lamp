@@ -6,3 +6,5 @@ start_container.sh
 mysql/*
 !mysql/.gitkeep
 .idea
+supporting_files/ssl/*
+!supporting_files/ssl/.gitkeep
