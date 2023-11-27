@@ -30,7 +30,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && \
   apt-get -y upgrade && \
-  apt-get -y install postfix python3-setuptools wget git pwgen apache2 php${PHP_VERSION} libapache2-mod-php${PHP_VERSION} mysql-server php${PHP_VERSION}-mysql php${PHP_VERSION}-apcu php${PHP_VERSION}-gd php${PHP_VERSION}-xml php${PHP_VERSION}-mbstring zip unzip php${PHP_VERSION}-zip curl php${PHP_VERSION}-curl && \
+  apt-get -y install postfix python3-setuptools wget git pwgen apache2 cron php${PHP_VERSION} libapache2-mod-php${PHP_VERSION} mysql-server php${PHP_VERSION}-mysql php${PHP_VERSION}-apcu php${PHP_VERSION}-gd php${PHP_VERSION}-xml php${PHP_VERSION}-mbstring zip unzip php${PHP_VERSION}-zip curl php${PHP_VERSION}-curl && \
   apt-get -y autoremove && \
   apt-get -y clean && \
   echo "ServerName localhost" >> /etc/apache2/apache2.conf
@@ -48,6 +48,7 @@ RUN chmod 755 /*.sh
 ADD supporting_files/supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
 ADD supporting_files/supervisord-mysqld.conf /etc/supervisor/conf.d/supervisord-mysqld.conf
 ADD supporting_files/supervisord-laravel.conf /etc/supervisor/conf.d/supervisord-laravel.conf
+ADD supporting_files/supervisord-cronjob.conf /etc/supervisor/conf.d/supervisord-cronjob.conf
 ADD supporting_files/mysqld_innodb.cnf /etc/mysql/conf.d/mysqld_innodb.cnf
 ADD supporting_files/supervisord.conf /etc/supervisor/supervisord.conf
 
@@ -88,5 +89,9 @@ ENV PHP_POST_MAX_SIZE 10M
 # Add volumes for the app and MySql
 VOLUME  ["/var/lib/mysql", "/app" ]
 
+# Create the log file to be able to run tail
+RUN touch /var/log/cron.log
+
 EXPOSE 80 3306
+#CMD ["/run.sh"]
 CMD ["/run.sh"]

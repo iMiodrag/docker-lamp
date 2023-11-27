@@ -8,3 +8,4 @@ mysql/*
 .idea
 supporting_files/ssl/*
 !supporting_files/ssl/.gitkeep
+clean_me.sh

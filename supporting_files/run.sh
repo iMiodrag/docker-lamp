@@ -96,4 +96,6 @@ else
     echo "=> Using an existing volume of MySQL"
 fi
 
+echo "Setting cronjob"
+echo "* * * * * php /var/www/html/artisan schedule:run >> /dev/null 2>&1" | crontab -
 exec supervisord -n -c /etc/supervisor/supervisord.conf
